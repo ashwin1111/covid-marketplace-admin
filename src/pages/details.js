@@ -77,6 +77,7 @@ class details extends React.Component {
 
         if (apiResponse.data.token == "expired") {
           alert("Token Expired, Please login again");
+          localStorage.clear();
           this.props.history.push("sign-in");
         }
         this.setState({ redirect: false, load: false })
