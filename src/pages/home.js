@@ -3,19 +3,9 @@ import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBBtn, M
 import './home.css'
 import axios from 'axios'
 import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Form,
-Row,
-  FormGroup,
+
 Alert,
-  Input,
-  Label,
-
-
+ 
 } from 'reactstrap';
 import Loader from 'react-loader-spinner'
 const URL="http://localhost:5555/admin/";
@@ -55,7 +45,7 @@ class home extends React.Component {
     }
     if(this.state.userName.length > 0 && this.state.password.length > 0){
       this.setState({load:true})
-      console.log(this.state.userName)
+   
      
       await axios.post(URL+"AdminLogin",{
         userid: this.state.userName,
@@ -67,18 +57,18 @@ class home extends React.Component {
         var key = localStorage.getItem("token");
      
         if(apiResponse.data.msg == "Login success :)"){
-          this.props.history.push("list");
+          this.props.history.push("details");
         }
         })
         .catch((error) =>{
-          // console.log(error)
+       
         this.setState({load:false})
         this.setState({visible:true})
               if(this.state.visible){
-        // console.log("work")
+
         setTimeout(
           function() {
-            // console.log("Working")
+         
             this.setState({visible:false})
           }
           .bind(this),
@@ -88,21 +78,7 @@ class home extends React.Component {
         })
      
     }
-    // else {
-    //   this.setState({visible:true})
-   
-    //   if(this.state.visible){
-    //     // console.log("work")
-    //     setTimeout(
-    //       function() {
-    //         // console.log("Working")
-    //         this.setState({visible:false})
-    //       }
-    //       .bind(this),
-    //       2000
-    //   );
-    //   }
-    // }
+  
 
 
   }

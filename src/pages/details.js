@@ -1,206 +1,446 @@
 import React from "react";
-import { MDBContainer, MDBRow, MDBCol, MDBCard,MDBCardBody, MDBInput, MDBBtn, MDBIcon, MDBModalFooter } from 'mdbreact';
-import { MDBDatePicker } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon, MDBModalFooter } from 'mdbreact';
 import './home.css'
 import axios from 'axios'
+
 import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Form,
-Row,
+
   FormGroup,
-Alert,
   Input,
   Label,
 
 
 } from 'reactstrap';
 import Loader from 'react-loader-spinner'
-const URL="http://localhost:5555/admin/";
+const URL = "http://localhost:5555/admin/";
 class details extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-    
-      redirect:false,
-      email:'',
-      password:'',
-      show:false,
-      visible:false,
-      userName:'',
-      password:'',
-      load:false,
-      time:'',
-    
+
+      redirect: true,
+      email: '',
+      password: '',
+      show: false,
+      visible: false,
+      userName: '',
+      password: '',
+      load: true,
+      time: '',
+      isGoing1: false,
+      isGoing2: false,
+      isGoing3: false,
+      isGoing4: false,
+      isGoing5: false,
+      time1: '',
+      time2: '',
+      time3: '',
+      time4: '',
+      time5: '',
+      time11: '',
+      time12: '',
+      time13: '',
+      time14: '',
+      time15: '',
+      value: 1,
+      value_11: '',
+      value_12: '',
+      value_13: '',
+      value_14: '',
+      active: 1,
+      value_15: '',
+      time_slots: [],
+      market_name: '',
+      market_address: '',
+      load_form: false,
+      switch1: true,
+      show_alert: false,
+
     };
-    this.login= this.login.bind(this);
+    this.handleInputChange1 = this.handleInputChange1.bind(this);
+    this.handleInputChange2 = this.handleInputChange2.bind(this);
+    this.handleInputChange3 = this.handleInputChange3.bind(this);
+    this.handleInputChange4 = this.handleInputChange4.bind(this);
+    this.handleInputChange5 = this.handleInputChange5.bind(this);
+    this.submit = this.submit.bind(this);
   };
-  async componentDidMount(){
- 
+  async componentDidMount() {
+    this.setState({ redirect: true, load: true })
     var key = localStorage.getItem("token");
-    console.log(key);
-    await axios.get(URL+"get_time_slots",
-    {
+
+    await axios.get(URL + "get_time_slots",
+      {
         headers: {
           'x-access-token': key,
         }
       }).then((apiResponse) => {
-     console.log(apiResponse.data.TimeSlots)
-     this.setState({time:apiResponse.data.TimeSlots})
-    //  const time=this.state.time;
-     console.log(this.state.time)
-        })
-        .catch((error) =>{
-     
-        
-        })
-     
+
+        if (apiResponse.data.token == "expired") {
+          alert("Token Expired, Please login again");
+          this.props.history.push("sign-in");
+        }
+        this.setState({ redirect: false, load: false })
+
+        this.setState({ time1: apiResponse.data.TimeSlots[0].time_slot_range })
+        this.setState({ time11: apiResponse.data.TimeSlots[0].time_slot_id })
+        this.setState({ time2: apiResponse.data.TimeSlots[1].time_slot_range })
+        this.setState({ time12: apiResponse.data.TimeSlots[1].time_slot_id })
+        this.setState({ time3: apiResponse.data.TimeSlots[2].time_slot_range })
+        this.setState({ time13: apiResponse.data.TimeSlots[2].time_slot_id })
+        this.setState({ time4: apiResponse.data.TimeSlots[3].time_slot_range })
+        this.setState({ time14: apiResponse.data.TimeSlots[3].time_slot_id })
+        this.setState({ time5: apiResponse.data.TimeSlots[4].time_slot_range })
+        this.setState({ time15: apiResponse.data.TimeSlots[4].time_slot_id })
+
+      })
+      .catch((error) => {
+
+
+      })
+
   }
-//   getLoginData = (value, type) =>{
-//     this.setState({
-//       [type]: value
-//     });
- 
-//   }
-  
-  
-//   getPickerValue = (value) => {
-//     console.log(value);
-//   }
-  async login(){
-    
-  
+
+  async submit() {
+    this.setState({ load_form: true })
+
+    if (this.state.switch1 == true) {
+      this.setState({ active: 1 })
+    }
+    if (this.state.switch1 == false) {
+      this.setState({ active: 0 })
+    }
+    var index = 0;
+    if (this.state.value_11 == true) {
+
+      var tim = this.state.time11
+      this.state.time_slots[index] = tim;
+      index++;
+      this.setState({ time_slots: this.state.time_slots })
+
+    }
+
+    if (this.state.value_12 == true) {
+
+
+      var tim1 = this.state.time12
+      this.state.time_slots[index] = tim1;
+      index++;
+      this.setState({ time_slots: this.state.time_slots })
+
+      // this.setState({
+      //   time_slots: [...this.state.time_slots, tim1]
+      // })
+    }
+    if (this.state.value_13 == true) {
+
+      var tim2 = this.state.time13
+      this.state.time_slots[index] = tim2;
+      index++;
+      this.setState({ time_slots: this.state.time_slots })
+
+    }
+    if (this.state.value_14 == true) {
+
+      var tim3 = this.state.time14
+      this.state.time_slots[index] = tim3;
+      index++;
+      this.setState({ time_slots: this.state.time_slots })
+
+    }
+    if (this.state.value_15 == true) {
+
+      var tim4 = this.state.time15
+      this.state.time_slots[index] = tim4;
+      index++;
+      this.setState({ time_slots: this.state.time_slots })
+
+    }
+
+
+    var key = localStorage.getItem("token");
+
+    var str = '';
+    this.state.time_slots.forEach(e => {
+      str = str + e + ',';
+    });
+
     let body =
     {
-      userid: this.state.userName,
-      password:this.state.password
-    }
-    if(this.state.userName.length > 0 && this.state.password.length > 0){
-      this.setState({load:true})
-      console.log(this.state.userName)
-     
-      await axios.post(URL+"AdminLogin",{
-        userid: this.state.userName,
-      password:this.state.password
-      }).then((apiResponse) => {
-        this.setState({load:false})
 
-        localStorage.setItem("token", apiResponse.data.token);
-        var key = localStorage.getItem("token");
-     
-        if(apiResponse.data.msg == "Login success :)"){
-          this.props.history.push("list");
+      market_palce_name: this.state.market_name,
+      market_place_address: this.state.market_address,
+      time_slot_ids: str,
+      customer_max_count: this.state.value,
+      active_check: this.state.active,
+      dates: "2020-12-02,2020-12-03,2020-12-04,2020-12-05"
+
+    }
+
+    await axios.post(URL + "AddMarketPlaces", body,
+      {
+        headers: {
+          'x-access-token': key,
         }
-        })
-        .catch((error) =>{
-          // console.log(error)
-        this.setState({load:false})
-        this.setState({visible:true})
-              if(this.state.visible){
-        // console.log("work")
-        setTimeout(
-          function() {
-            // console.log("Working")
-            this.setState({visible:false})
-          }
-          .bind(this),
-          2000
-      );
       }
-        })
-     
-    }
-    // else {
-    //   this.setState({visible:true})
-   
-    //   if(this.state.visible){
-    //     // console.log("work")
-    //     setTimeout(
-    //       function() {
-    //         // console.log("Working")
-    //         this.setState({visible:false})
-    //       }
-    //       .bind(this),
-    //       2000
-    //   );
-    //   }
-    // }
+    ).then((apiResponse) => {
 
+      this.setState({ load_form: false })
+
+      if (apiResponse.data.msg == "Market-Place Added Successfully :)") {
+        alert("Market Places Added Successfully");
+        window.location.reload();
+      }
+    }).catch((error) => {
+
+      this.setState({ load_form: false })
+    })
+
+
+  }
+
+
+  handleInputChange1(event) {
+    const target = event.target;
+    const value_1 = target.name === 'isGoing1' ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value_1
+    });
+
+    this.setState({ value_11: value_1 })
+
+
+
+  }
+  handleInputChange2(event) {
+    const target = event.target;
+    const value_2 = target.name === 'isGoing2' ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value_2
+    });
+
+    this.setState({ value_12: value_2 })
+
+  }
+  handleInputChange3(event) {
+    const target = event.target;
+    const value_3 = target.name === 'isGoing3' ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value_3
+    });
+
+    this.setState({ value_13: value_3 })
+
+  }
+  handleInputChange4(event) {
+    const target = event.target;
+    const value_4 = target.name === 'isGoing4' ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value_4
+    });
+
+    this.setState({ value_14: value_4 })
+
+  }
+  handleInputChange5(event) {
+    const target = event.target;
+    const value_5 = target.name === 'isGoing5' ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value_5
+    });
+
+    this.setState({ value_15: value_5 })
+
+  }
+  decrease = () => {
+    this.setState({ value: this.state.value - 1 });
+  }
+
+  increase = () => {
+    this.setState({ value: this.state.value + 1 });
+  }
+  handleSwitchChange = nr => () => {
+    let switchNumber = `switch${nr}`;
+    this.setState({
+      [switchNumber]: !this.state[switchNumber]
+    });
 
   }
   render() {
-  return (
-    <MDBContainer>
-      <MDBRow>
-        <MDBCol md="2"></MDBCol>
-        <MDBCol md="8" style={{ top: '30px'}}>
-          <MDBCard>
-            <MDBCardBody className="mx-4">
-              <div className="text-center">
-                <h3 className="dark-grey-text mb-5">
-                  <strong>Shop Details</strong>
-                </h3>
-              </div>
-              {/* <MDBInput label="Example label" outline size="sm" />
-              <MDBInput type="textarea" label="Example label" outline /> */}
-              <div className="form-group">
-      <label htmlFor="formGroupExampleInput">Market Name</label>
-      <input
-        type="text"
-        className="form-control"
-        id="formGroupExampleInput"
-      />
-    </div>
-  
-              <div className="form-group">
-            <label htmlFor="exampleFormControlTextarea1">
-            Market Address
-            </label>
-            <textarea
-            className="form-control"
-            id="exampleFormControlTextarea1"
-            rows="5"
+    return (
+      <div>
+        {this.state.redirect ? (
+          <center>
+            <div style={{}}><Loader
+              type="ThreeDots"
+              color="#3872C1"
+              height={100}
+              width={100}
+
+              visible={this.state.load}
             />
-        </div>
-        {/* {this.state.time.map((item,i) =>
-          <div> 
-          <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="defaultIndeterminate" checked/>
-          <label class="custom-control-label" for="defaultIndeterminate" key={i}>{item.time_slot_range}</label>
-        </div>
-        </div>
+            </div>
+          </center>
+
+
+        ) : (
+            <MDBContainer>
+              <MDBRow>
+                <MDBCol md="2"></MDBCol>
+                <MDBCol md="8" style={{ top: '30px' }}>
+                  <MDBCard>
+
+                    <MDBCardBody className="mx-4">
+                      <div className="text-center">
+                        <h3 className="dark-grey-text mb-5">
+                          <strong>Shop Details</strong>
+                        </h3>
+                      </div>
        
-        )} */}
-      
-    
-             
-              {/* <p className="font-small blue-text d-flex justify-content-end pb-3">
-                Forgot
-                <a href="#!" className="blue-text ml-1">
+                      <FormGroup>
+                        <Label for="exampleavailable">Market Name</Label>
+                        <Input
+                          type="text"
+                          name="Market Name"
+                          placeholder="Market Name"
 
-                  Password?
-                </a>
-              </p> */}
-             
-            </MDBCardBody>
-            {/* <MDBModalFooter className="mx-5 pt-3 mb-1">
-              <p className="font-small grey-text d-flex justify-content-end">
-                Not a member?
-                <a href="#!" className="blue-text ml-1">
+                          onChange={(event) => this.setState({ market_name: event.target.value })}
+                        />
+                      </FormGroup>
+                      <FormGroup>
+                        <Label for="exampledescription">Market Address</Label>
+                        <Input type="textarea" name="Market Address"
+                          rows="4"
+                          onChange={(event) => this.setState({ market_address: event.target.value })}
+                        />
+                      </FormGroup>
+                      <div className="form-group">
+                        <label htmlFor="exampleFormControlTextarea1">
+                          Time Slots
+            </label>
+                        <div>
+                          <input
+                            name="isGoing1"
+                            type="checkbox"
+                            checked={this.state.isGoing1}
+                            onChange={this.handleInputChange1} />{'     '}<label htmlFor="exampleFormControlTextarea1">
+                            {this.state.time1}
+                          </label>
+                        </div>
+                        <div>
+                          <input
+                            name="isGoing2"
+                            type="checkbox"
+                            checked={this.state.isGoing2}
+                            onChange={this.handleInputChange2} />{'     '}<label htmlFor="exampleFormControlTextarea1">
+                            {this.state.time2}
+                          </label>
+                        </div>
+                        <div>
+                          <input
+                            name="isGoing3"
+                            type="checkbox"
+                            checked={this.state.isGoing3}
+                            onChange={this.handleInputChange3} />{'     '}<label htmlFor="exampleFormControlTextarea1">
+                            {this.state.time3}
+                          </label>
+                        </div>
+                        <div>
+                          <input
+                            name="isGoing4"
+                            type="checkbox"
+                            checked={this.state.isGoing4}
+                            onChange={this.handleInputChange4} />{'     '}<label htmlFor="exampleFormControlTextarea1">
+                            {this.state.time4}
+                          </label>
+                        </div>
+                        <div>
+                          <input
+                            name="isGoing5"
+                            type="checkbox"
+                            checked={this.state.isGoing5}
+                            onChange={this.handleInputChange5} />{'     '}<label htmlFor="exampleFormControlTextarea1">
+                            {this.state.time5}
+                          </label>
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="exampleFormControlTextarea1">
+                          Maximum Count
+            </label>
+                        <div className="def-number-input number-input">
+                          {this.state.value > 0 ?
+                            <button onClick={this.decrease} className="minus"></button>
+                            :
+                            null
+                          }
+                          <input className="quantity" name="quantity" value={this.state.value} onChange={() => console.log('change')}
+                            type="number" />
+                          <button onClick={this.increase} className="plus"></button>
+                        </div>
+                      </div>
 
-                  Sign Up
-                </a>
-              </p>
-            </MDBModalFooter> */}
-          </MDBCard>
-        </MDBCol>
-      </MDBRow>
-    </MDBContainer>
-  );
-};
+
+                      <div className='custom-control custom-switch'>
+
+                        <input
+                          type='checkbox'
+                          className='custom-control-input'
+                          id='customSwitches'
+                          checked={this.state.switch1}
+                          onChange={this.handleSwitchChange(1)}
+                          readOnly
+                        />
+                        <label className='custom-control-label' htmlFor='customSwitches'>
+                          Set as Active
+        </label>
+
+                      </div>
+
+                      <br />
+                      <center> <Loader
+                        type="ThreeDots"
+                        color="#3872C1"
+                        height={100}
+                        width={100}
+
+                        visible={this.state.load_form}
+                      /></center>
+                      <div>
+
+                        <div className="text-center mb-3">
+                          <MDBBtn
+                            type="button"
+                            gradient="blue"
+                            rounded
+                            className="btn-block z-depth-1a"
+                            onClick={this.submit}
+                          >
+                            Submit
+                </MDBBtn>
+                        </div>
+                      </div>
+
+                
+                    </MDBCardBody>
+                 
+                  </MDBCard>
+                </MDBCol>
+              </MDBRow>
+            </MDBContainer>
+          )}
+      </div>
+    );
+  };
 }
 
 export default details;
