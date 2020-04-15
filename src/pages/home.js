@@ -27,7 +27,18 @@ class home extends React.Component {
     this.login= this.login.bind(this);
   };
   componentDidMount(){
-
+    // localStorage.clear();
+    var key = localStorage.getItem("token");
+console.log(key);
+ 
+    if(key == null){
+    
+    }
+    else{
+    
+      this.props.history.push("details");
+    }
+   
   }
   getLoginData = (value, type) =>{
     this.setState({
