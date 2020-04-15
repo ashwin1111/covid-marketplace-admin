@@ -98,15 +98,21 @@ class details extends React.Component {
 
       })
       .catch((error) => {
-
+        this.props.history.push("sign-in");
 
       })
 
   }
 
   async submit() {
-    this.setState({ load_form: true })
+ 
+    if(this.state.market_name.length == 0 && this.state.market_address.length == 0){
+alert("Please Fill all Details");
 
+    }
+    else{
+   
+      this.setState({ load_form: true })
     if (this.state.switch1 == true) {
       this.setState({ active: 1 })
     }
@@ -167,11 +173,16 @@ class details extends React.Component {
     this.state.time_slots.forEach(e => {
       str = str + e + ',';
     });
+str = str.slice(0, -1); 
+console.log(str);
 
     var date_val = '';
     this.state.dates_values.forEach(e => {
       date_val = date_val + e + ',';
     });
+ 
+    date_val = date_val.slice(0, -1); 
+console.log(date_val);
    
 
     let body =
@@ -200,11 +211,16 @@ class details extends React.Component {
         alert("Market Places Added Successfully");
         window.location.reload();
       }
+      else{
+        alert("Adding Market Place Failed");
+        window.location.reload();
+      }
     }).catch((error) => {
-
+      alert("Adding Market Place Failed");
+      window.location.reload();
       this.setState({ load_form: false })
     })
-
+  }
 
   }
 
