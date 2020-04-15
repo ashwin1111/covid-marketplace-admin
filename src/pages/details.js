@@ -2,7 +2,7 @@ import React from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon, MDBModalFooter } from 'mdbreact';
 import './home.css'
 import axios from 'axios'
-
+import MultipleDatePicker from 'react-multiple-datepicker'
 import {
 
   FormGroup,
@@ -12,7 +12,7 @@ import {
 
 } from 'reactstrap';
 import Loader from 'react-loader-spinner'
-const URL = "http://localhost:5555/admin/";
+const URL = "https://covid19-pollachi.herokuapp.com/admin/";
 class details extends React.Component {
   constructor(props) {
     super(props);
@@ -55,6 +55,8 @@ class details extends React.Component {
       load_form: false,
       switch1: true,
       show_alert: false,
+      dates_values:[],
+      ds:new Date(),
 
     };
     this.handleInputChange1 = this.handleInputChange1.bind(this);
@@ -63,6 +65,7 @@ class details extends React.Component {
     this.handleInputChange4 = this.handleInputChange4.bind(this);
     this.handleInputChange5 = this.handleInputChange5.bind(this);
     this.submit = this.submit.bind(this);
+    this.dates = this.dates.bind(this);
   };
   async componentDidMount() {
     this.setState({ redirect: true, load: true })
@@ -165,6 +168,12 @@ class details extends React.Component {
       str = str + e + ',';
     });
 
+    var date_val = '';
+    this.state.dates_values.forEach(e => {
+      date_val = date_val + e + ',';
+    });
+   
+
     let body =
     {
 
@@ -173,7 +182,7 @@ class details extends React.Component {
       time_slot_ids: str,
       customer_max_count: this.state.value,
       active_check: this.state.active,
-      dates: "2020-12-02,2020-12-03,2020-12-04,2020-12-05"
+      dates: date_val
 
     }
 
@@ -276,12 +285,39 @@ class details extends React.Component {
     });
 
   }
+  dates(date1)
+  {
+   
+    var count = 0;
+    for(var i=0;i<date1.length;i++)
+    {
+    var date = date1[i];
+
+    var month = date.getMonth()+1;
+    var monthString;
+    if (month < 10) {
+      monthString = '0' + month.toString();
+    } else {
+      monthString = month.toString();
+    }
+var dateString = date.getFullYear().toString() + '-' + monthString + '-' + date.getDate().toString();
+// this.setState({dates_values:dateString})
+// this.setState({
+//   dates_values: [...this.state.dates_values, dateString]
+// })
+this.state.dates_values[count] = dateString;
+count++;
+this.setState({ dates_values: this.state.dates_values })
+
+  }
+
+  }
   render() {
     return (
       <div>
         {this.state.redirect ? (
           <center>
-            <div style={{}}><Loader
+            <div style={{paddingTop:'20%'}}><Loader
               type="ThreeDots"
               color="#3872C1"
               height={100}
@@ -374,6 +410,30 @@ class details extends React.Component {
                           </label>
                         </div>
                       </div>
+                      <div className="form-group">
+                        <label htmlFor="exampleFormControlTextarea1">
+                        Date
+            </label>
+            <div>
+                      <MultipleDatePicker placeholder="Select Date" value={this.state.ds} onSubmit={date=>this.dates(date)} minDate={new Date()} />
+                      </div>
+                      </div>
+                      {/* <MultipleDatePicker
+                    
+    onSubmit={dates => 
+      var date = new Date();
+      var month = date.getMonth()+1;
+      var monthString;
+      if (month < 10) {
+        monthString = '0' + month.toString();
+      } else {
+        monthString = month.toString();
+      }
+  var dateString = date.getFullYear().toString() + '-' + date.getDate().toString() + '-' + monthString;
+  console.log(dateString);
+      console.log('selected date', dates)}
+  /> */}
+
                       <div className="form-group">
                         <label htmlFor="exampleFormControlTextarea1">
                           Maximum Count

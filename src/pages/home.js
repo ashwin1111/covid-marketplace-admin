@@ -8,7 +8,7 @@ Alert,
  
 } from 'reactstrap';
 import Loader from 'react-loader-spinner'
-const URL="http://localhost:5555/admin/";
+const URL="https://covid19-pollachi.herokuapp.com/admin/";
 class home extends React.Component {
   constructor(props) {
     super(props);
@@ -140,7 +140,7 @@ class home extends React.Component {
                 </MDBBtn>
               </div>
              
-              <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2">
+              {/* <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2">
 
                 or Sign in with:
               </p>
@@ -169,7 +169,7 @@ class home extends React.Component {
                 >
                   <MDBIcon fab icon="google-plus-g" className="blue-text" />
                 </MDBBtn>
-              </div>
+              </div> */}
             </MDBCardBody>
             {/* <MDBModalFooter className="mx-5 pt-3 mb-1">
               <p className="font-small grey-text d-flex justify-content-end">
