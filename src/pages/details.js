@@ -57,6 +57,8 @@ class details extends React.Component {
       show_alert: false,
       dates_values:[],
       ds:new Date(),
+      market_license:''
+
 
     };
     this.handleInputChange1 = this.handleInputChange1.bind(this);
@@ -105,10 +107,14 @@ class details extends React.Component {
   }
 
   async submit() {
- 
+ console.log(this.state.market_license)
     if(this.state.market_name.length == 0 && this.state.market_address.length == 0){
 alert("Please Fill all Details");
 
+    }
+    else if(this.state.market_license.length >15)
+    {
+      alert("Please Enter Valid License Number");  
     }
     else{
    
@@ -193,6 +199,7 @@ console.log(date_val);
       time_slot_ids: str,
       customer_max_count: this.state.value,
       active_check: this.state.active,
+      market_licens:this.state.market_license,
       dates: date_val
 
     }
@@ -376,6 +383,16 @@ this.setState({ dates_values: this.state.dates_values })
                           onChange={(event) => this.setState({ market_address: event.target.value })}
                         />
                       </FormGroup>
+                      <FormGroup>
+                        <Label for="exampleavailable">Market License Number</Label>
+                        <Input
+                          type="text"
+                          name="Market License Number"
+                          placeholder="Market License Number"
+
+                          onChange={(event) => this.setState({ market_license: event.target.value })}
+                        />
+                      </FormGroup>
                       <div className="form-group">
                         <label htmlFor="exampleFormControlTextarea1">
                           Time Slots
@@ -467,7 +484,7 @@ this.setState({ dates_values: this.state.dates_values })
                       </div>
 
 
-                      <div className='custom-control custom-switch'>
+                      {/* <div className='custom-control custom-switch'>
 
                         <input
                           type='checkbox'
@@ -481,9 +498,9 @@ this.setState({ dates_values: this.state.dates_values })
                           Set as Active
         </label>
 
-                      </div>
+                      </div> */}
 
-                      <br />
+                
                       <center> <Loader
                         type="ThreeDots"
                         color="#3872C1"
