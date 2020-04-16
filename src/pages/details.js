@@ -68,6 +68,9 @@ class details extends React.Component {
     this.handleInputChange5 = this.handleInputChange5.bind(this);
     this.submit = this.submit.bind(this);
     this.dates = this.dates.bind(this);
+    this.logout = this.logout.bind(this);
+    this.list = this.list.bind(this);
+   
   };
   async componentDidMount() {
     this.setState({ redirect: true, load: true })
@@ -86,7 +89,7 @@ class details extends React.Component {
           this.props.history.push("sign-in");
         }
         this.setState({ redirect: false, load: false })
-
+        if(apiResponse.status == "200"){
         this.setState({ time1: apiResponse.data.TimeSlots[0].time_slot_range })
         this.setState({ time11: apiResponse.data.TimeSlots[0].time_slot_id })
         this.setState({ time2: apiResponse.data.TimeSlots[1].time_slot_range })
@@ -97,17 +100,32 @@ class details extends React.Component {
         this.setState({ time14: apiResponse.data.TimeSlots[3].time_slot_id })
         this.setState({ time5: apiResponse.data.TimeSlots[4].time_slot_range })
         this.setState({ time15: apiResponse.data.TimeSlots[4].time_slot_id })
-
+        }
+        else{
+        
+          alert("Something went wrong, please click here");
+          this.props.history.push("sign-in");
+        }
       })
       .catch((error) => {
+        alert("Something went wrong, please click here");
         this.props.history.push("sign-in");
 
       })
 
   }
 
+  list(){
+    this.props.history.push("list");
+  }
+logout(){
+
+  localStorage.clear();
+  this.props.history.push("sign-in");
+
+}
   async submit() {
- console.log(this.state.market_license)
+
     if(this.state.market_name.length == 0 && this.state.market_address.length == 0){
 alert("Please Fill all Details");
 
@@ -180,7 +198,7 @@ alert("Please Fill all Details");
       str = str + e + ',';
     });
 str = str.slice(0, -1); 
-console.log(str);
+
 
     var date_val = '';
     this.state.dates_values.forEach(e => {
@@ -188,7 +206,7 @@ console.log(str);
     });
  
     date_val = date_val.slice(0, -1); 
-console.log(date_val);
+
    
 
     let body =
@@ -358,12 +376,25 @@ this.setState({ dates_values: this.state.dates_values })
                 <MDBCol md="2"></MDBCol>
                 <MDBCol md="8" style={{ top: '30px' }}>
                   <MDBCard>
-
+                  <div className="text-center mb-3">
+                          <MDBBtn
+                            type="button"
+                            gradient="blue"
+                            rounded
+                            className="btn-block z-depth-1a"
+                            onClick={this.list}
+                          >
+                            See Market place details
+                </MDBBtn>
+                        </div>
+                
                     <MDBCardBody className="mx-4">
                       <div className="text-center">
                         <h3 className="dark-grey-text mb-5">
                           <strong>Shop Details</strong>
                         </h3>
+                        
+                  
                       </div>
        
                       <FormGroup>
@@ -445,7 +476,7 @@ this.setState({ dates_values: this.state.dates_values })
                       </div>
                       <div className="form-group">
                         <label htmlFor="exampleFormControlTextarea1">
-                        Date
+                        Market place date (Your are also allowed to select multiple dates)
             </label>
             <div>
                       <MultipleDatePicker placeholder="Select Date" value={this.state.ds} onSubmit={date=>this.dates(date)} minDate={new Date()} />
@@ -469,7 +500,7 @@ this.setState({ dates_values: this.state.dates_values })
 
                       <div className="form-group">
                         <label htmlFor="exampleFormControlTextarea1">
-                          Maximum Count
+                         Maximum number of people allowed per time-slot
             </label>
                         <div className="def-number-input number-input">
                           {this.state.value > 0 ?
@@ -523,10 +554,34 @@ this.setState({ dates_values: this.state.dates_values })
                 </MDBBtn>
                         </div>
                       </div>
+                      {/* <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2">
 
+{'&'}
+</p> */}
+
+{/* <div className="row my-3 d-flex justify-content-center">
+<MDBBtn
+  type="button"
+  color="white"
+  rounded
+  className="mr-md-3 z-depth-1a"
+>
+  <MDBIcon fab className="blue-text text-center" onClick={this.list}><b>See Market place details</b></MDBIcon>
+</MDBBtn>
+</div> */}
                 
                     </MDBCardBody>
-                 
+                    <div className="text-center mb-3">
+                          <MDBBtn
+                            type="button"
+                            gradient="blue"
+                            rounded
+                            className="btn-block z-depth-1a"
+                            onClick={this.logout}
+                          >
+                            Logout
+                </MDBBtn>
+                        </div>
                   </MDBCard>
                 </MDBCol>
               </MDBRow>

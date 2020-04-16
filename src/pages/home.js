@@ -29,7 +29,7 @@ class home extends React.Component {
   componentDidMount(){
     // localStorage.clear();
     var key = localStorage.getItem("token");
-console.log(key);
+
  
     if(key == null){
     
