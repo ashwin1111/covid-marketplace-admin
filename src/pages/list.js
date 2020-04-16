@@ -244,7 +244,7 @@ render() {
        
           <CardText >
             
-            Maximum Customer Count per Time-slot: <b>{customer_max_count}</b></CardText>
+            Maximum customer count per time-slot: <b>{customer_max_count}</b></CardText>
 
          
             {/* <p key={i}>

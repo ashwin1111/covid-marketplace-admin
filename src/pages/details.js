@@ -476,7 +476,7 @@ this.setState({ dates_values: this.state.dates_values })
                       </div>
                       <div className="form-group">
                         <label htmlFor="exampleFormControlTextarea1">
-                        Market place date (Your are also allowed to select multiple dates)
+                        Market place date (You are also allowed to select multiple dates)
             </label>
             <div>
                       <MultipleDatePicker placeholder="Select Date" value={this.state.ds} onSubmit={date=>this.dates(date)} minDate={new Date()} />
@@ -500,7 +500,7 @@ this.setState({ dates_values: this.state.dates_values })
 
                       <div className="form-group">
                         <label htmlFor="exampleFormControlTextarea1">
-                         Maximum number of people allowed per time-slot
+                         Maximum number of people allowed per timeslot
             </label>
                         <div className="def-number-input number-input">
                           {this.state.value > 0 ?
