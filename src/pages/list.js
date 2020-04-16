@@ -19,7 +19,7 @@ import {
   Card, CardImg, CardText, CardBody,
   CardTitle, CardSubtitle, Button
 } from 'reactstrap';
-const URL = "http://localhost:5555/admin/";
+const URL = "https://covid19-pollachi.herokuapp.com/admin/";
 class list extends React.Component {
   constructor(props) {
     super(props);
