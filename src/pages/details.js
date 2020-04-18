@@ -103,12 +103,15 @@ class details extends React.Component {
         }
         else{
         
-          alert("Something went wrong, please click here");
+          alert("Session expired, please login again");
+          localStorage.clear();
           this.props.history.push("sign-in");
         }
       })
       .catch((error) => {
-        alert("Something went wrong, please click here");
+        console.log(error);
+        alert("Something went wrong, please try again later");
+        localStorage.clear();
         this.props.history.push("sign-in");
 
       })
@@ -384,7 +387,7 @@ this.setState({ dates_values: this.state.dates_values })
                             className="btn-block z-depth-1a"
                             onClick={this.list}
                           >
-                            See Market place details
+                            Booking History
                 </MDBBtn>
                         </div>
                 
