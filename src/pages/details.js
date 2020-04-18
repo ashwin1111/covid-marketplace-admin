@@ -27,26 +27,7 @@ class details extends React.Component {
       password: '',
       load: true,
       time: '',
-      isGoing1: false,
-      isGoing2: false,
-      isGoing3: false,
-      isGoing4: false,
-      isGoing5: false,
-      time1: '',
-      time2: '',
-      time3: '',
-      time4: '',
-      time5: '',
-      time11: '',
-      time12: '',
-      time13: '',
-      time14: '',
-      time15: '',
       value: 1,
-      value_11: '',
-      value_12: '',
-      value_13: '',
-      value_14: '',
       active: 1,
       value_15: '',
       time_slots: [],
@@ -57,15 +38,17 @@ class details extends React.Component {
       show_alert: false,
       dates_values:[],
       ds:new Date(),
-      market_license:''
+      market_license:'',
+      time_check:[],
+      full_value:[],
+      check_ans:[],
+       checkedItems: new Map(),
 
 
     };
-    this.handleInputChange1 = this.handleInputChange1.bind(this);
-    this.handleInputChange2 = this.handleInputChange2.bind(this);
-    this.handleInputChange3 = this.handleInputChange3.bind(this);
-    this.handleInputChange4 = this.handleInputChange4.bind(this);
-    this.handleInputChange5 = this.handleInputChange5.bind(this);
+
+        this.handleChange_med = this.handleChange_med.bind(this);
+
     this.submit = this.submit.bind(this);
     this.dates = this.dates.bind(this);
     this.logout = this.logout.bind(this);
@@ -90,16 +73,18 @@ class details extends React.Component {
         }
         this.setState({ redirect: false, load: false })
         if(apiResponse.status == "200"){
-        this.setState({ time1: apiResponse.data.TimeSlots[0].time_slot_range })
-        this.setState({ time11: apiResponse.data.TimeSlots[0].time_slot_id })
-        this.setState({ time2: apiResponse.data.TimeSlots[1].time_slot_range })
-        this.setState({ time12: apiResponse.data.TimeSlots[1].time_slot_id })
-        this.setState({ time3: apiResponse.data.TimeSlots[2].time_slot_range })
-        this.setState({ time13: apiResponse.data.TimeSlots[2].time_slot_id })
-        this.setState({ time4: apiResponse.data.TimeSlots[3].time_slot_range })
-        this.setState({ time14: apiResponse.data.TimeSlots[3].time_slot_id })
-        this.setState({ time5: apiResponse.data.TimeSlots[4].time_slot_range })
-        this.setState({ time15: apiResponse.data.TimeSlots[4].time_slot_id })
+          this.setState({time_check:apiResponse.data.TimeSlots})
+              
+          
+           for(var i=0;i<apiResponse.data.TimeSlots.length;i++)
+           {
+        
+               this.setState({full_value:[...this.state.full_value,apiResponse.data.TimeSlots[i]]})
+     
+         
+           }
+
+    
         }
         else{
         
@@ -109,7 +94,7 @@ class details extends React.Component {
         }
       })
       .catch((error) => {
-        console.log(error);
+    
         alert("Something went wrong, please try again later");
         localStorage.clear();
         this.props.history.push("sign-in");
@@ -128,14 +113,38 @@ logout(){
 
 }
   async submit() {
+    var all = [];
+    this.state.checkedItems.forEach((value, key) => {
+   
+      if(value){
+        all.push(key)
+        
+      }
+    
+   
+
+})
+
+
+var check_ans = [];
+for(var i=0;i<all.length;i++){
+  for(var j=0;j<this.state.full_value.length;j++){
+    if(all[i] == this.state.full_value[j].time_slot_range){
+  
+check_ans.push(this.state.full_value[j].time_slot_id);
+    }
+  }
+}
+
+
 
     if(this.state.market_name.length == 0 && this.state.market_address.length == 0){
-alert("Please Fill all Details");
+alert("Please fill all details");
 
     }
     else if(this.state.market_license.length >15)
     {
-      alert("Please Enter Valid License Number");  
+      alert("Please enter valid License number");  
     }
     else{
    
@@ -146,61 +155,17 @@ alert("Please Fill all Details");
     if (this.state.switch1 == false) {
       this.setState({ active: 0 })
     }
-    var index = 0;
-    if (this.state.value_11 == true) {
-
-      var tim = this.state.time11
-      this.state.time_slots[index] = tim;
-      index++;
-      this.setState({ time_slots: this.state.time_slots })
-
-    }
-
-    if (this.state.value_12 == true) {
-
-
-      var tim1 = this.state.time12
-      this.state.time_slots[index] = tim1;
-      index++;
-      this.setState({ time_slots: this.state.time_slots })
-
-      // this.setState({
-      //   time_slots: [...this.state.time_slots, tim1]
-      // })
-    }
-    if (this.state.value_13 == true) {
-
-      var tim2 = this.state.time13
-      this.state.time_slots[index] = tim2;
-      index++;
-      this.setState({ time_slots: this.state.time_slots })
-
-    }
-    if (this.state.value_14 == true) {
-
-      var tim3 = this.state.time14
-      this.state.time_slots[index] = tim3;
-      index++;
-      this.setState({ time_slots: this.state.time_slots })
-
-    }
-    if (this.state.value_15 == true) {
-
-      var tim4 = this.state.time15
-      this.state.time_slots[index] = tim4;
-      index++;
-      this.setState({ time_slots: this.state.time_slots })
-
-    }
+    
 
 
     var key = localStorage.getItem("token");
 
     var str = '';
-    this.state.time_slots.forEach(e => {
+    check_ans.forEach(e => {
       str = str + e + ',';
     });
 str = str.slice(0, -1); 
+
 
 
     var date_val = '';
@@ -236,85 +201,30 @@ str = str.slice(0, -1);
       this.setState({ load_form: false })
 
       if (apiResponse.data.msg == "Market-Place Added Successfully :)") {
-        alert("Market Places Added Successfully");
+        alert("Market places added Successfully");
         window.location.reload();
       }
       else{
-        alert("Adding Market Place Failed");
+        alert("Adding market place failed");
         window.location.reload();
       }
     }).catch((error) => {
-      alert("Adding Market Place Failed");
+      alert("Adding market place Failed");
       window.location.reload();
       this.setState({ load_form: false })
     })
   }
 
   }
+   handleChange_med(e) {
 
-
-  handleInputChange1(event) {
-    const target = event.target;
-    const value_1 = target.name === 'isGoing1' ? target.checked : target.value;
-    const name = target.name;
-
-    this.setState({
-      [name]: value_1
-    });
-
-    this.setState({ value_11: value_1 })
-
-
+    
+    const item = e.target.name;
+    const isChecked = e.target.checked;
+    this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(item, isChecked) }));
 
   }
-  handleInputChange2(event) {
-    const target = event.target;
-    const value_2 = target.name === 'isGoing2' ? target.checked : target.value;
-    const name = target.name;
 
-    this.setState({
-      [name]: value_2
-    });
-
-    this.setState({ value_12: value_2 })
-
-  }
-  handleInputChange3(event) {
-    const target = event.target;
-    const value_3 = target.name === 'isGoing3' ? target.checked : target.value;
-    const name = target.name;
-
-    this.setState({
-      [name]: value_3
-    });
-
-    this.setState({ value_13: value_3 })
-
-  }
-  handleInputChange4(event) {
-    const target = event.target;
-    const value_4 = target.name === 'isGoing4' ? target.checked : target.value;
-    const name = target.name;
-
-    this.setState({
-      [name]: value_4
-    });
-
-    this.setState({ value_14: value_4 })
-
-  }
-  handleInputChange5(event) {
-    const target = event.target;
-    const value_5 = target.name === 'isGoing5' ? target.checked : target.value;
-    const name = target.name;
-
-    this.setState({
-      [name]: value_5
-    });
-
-    this.setState({ value_15: value_5 })
-
-  }
   decrease = () => {
     this.setState({ value: this.state.value - 1 });
   }
@@ -345,10 +255,7 @@ str = str.slice(0, -1);
       monthString = month.toString();
     }
 var dateString = date.getFullYear().toString() + '-' + monthString + '-' + date.getDate().toString();
-// this.setState({dates_values:dateString})
-// this.setState({
-//   dates_values: [...this.state.dates_values, dateString]
-// })
+
 this.state.dates_values[count] = dateString;
 count++;
 this.setState({ dates_values: this.state.dates_values })
@@ -399,7 +306,10 @@ this.setState({ dates_values: this.state.dates_values })
                         
                   
                       </div>
-       
+                      {/* <div> */}
+       <p style={{color:'red',float:'right',width:'170px'}}>All fields are mandatory</p>
+       {/* </div> */}
+       <br/>
                       <FormGroup>
                         <Label for="exampleavailable">Market Name</Label>
                         <Input
@@ -427,79 +337,34 @@ this.setState({ dates_values: this.state.dates_values })
                           onChange={(event) => this.setState({ market_license: event.target.value })}
                         />
                       </FormGroup>
-                      <div className="form-group">
+                       <div className="form-group">
                         <label htmlFor="exampleFormControlTextarea1">
                           Time Slots
             </label>
-                        <div>
-                          <input
-                            name="isGoing1"
-                            type="checkbox"
-                            checked={this.state.isGoing1}
-                            onChange={this.handleInputChange1} />{'     '}<label htmlFor="exampleFormControlTextarea1">
-                            {this.state.time1}
-                          </label>
+            
+                {this.state.time_check.map((item,i) =>
+              <div>
+           
+            
+  <label key={i}>
+   <input type="checkbox"  name={item.time_slot_range} checked={this.state.checkedItems.get(item.time_slot_range)} onChange={this.handleChange_med} />
+            {'       '}  {item.time_slot_range}
+             
+            </label>
+            </div>
+                      
+                              )}
                         </div>
-                        <div>
-                          <input
-                            name="isGoing2"
-                            type="checkbox"
-                            checked={this.state.isGoing2}
-                            onChange={this.handleInputChange2} />{'     '}<label htmlFor="exampleFormControlTextarea1">
-                            {this.state.time2}
-                          </label>
-                        </div>
-                        <div>
-                          <input
-                            name="isGoing3"
-                            type="checkbox"
-                            checked={this.state.isGoing3}
-                            onChange={this.handleInputChange3} />{'     '}<label htmlFor="exampleFormControlTextarea1">
-                            {this.state.time3}
-                          </label>
-                        </div>
-                        <div>
-                          <input
-                            name="isGoing4"
-                            type="checkbox"
-                            checked={this.state.isGoing4}
-                            onChange={this.handleInputChange4} />{'     '}<label htmlFor="exampleFormControlTextarea1">
-                            {this.state.time4}
-                          </label>
-                        </div>
-                        <div>
-                          <input
-                            name="isGoing5"
-                            type="checkbox"
-                            checked={this.state.isGoing5}
-                            onChange={this.handleInputChange5} />{'     '}<label htmlFor="exampleFormControlTextarea1">
-                            {this.state.time5}
-                          </label>
-                        </div>
-                      </div>
+                    
                       <div className="form-group">
                         <label htmlFor="exampleFormControlTextarea1">
                         Market place date (You are also allowed to select multiple dates)
             </label>
             <div>
-                      <MultipleDatePicker placeholder="Select Date" value={this.state.ds} onSubmit={date=>this.dates(date)} minDate={new Date()} />
+                      <MultipleDatePicker value={this.state.ds} onSubmit={date=>this.dates(date)} minDate={new Date()} />
                       </div>
                       </div>
-                      {/* <MultipleDatePicker
-                    
-    onSubmit={dates => 
-      var date = new Date();
-      var month = date.getMonth()+1;
-      var monthString;
-      if (month < 10) {
-        monthString = '0' + month.toString();
-      } else {
-        monthString = month.toString();
-      }
-  var dateString = date.getFullYear().toString() + '-' + date.getDate().toString() + '-' + monthString;
-  console.log(dateString);
-      console.log('selected date', dates)}
-  /> */}
+                  
 
                       <div className="form-group">
                         <label htmlFor="exampleFormControlTextarea1">
@@ -511,28 +376,13 @@ this.setState({ dates_values: this.state.dates_values })
                             :
                             null
                           }
-                          <input className="quantity" name="quantity" value={this.state.value} onChange={() => console.log('change')}
+                          <input className="quantity" name="quantity" value={this.state.value} 
                             type="number" />
                           <button onClick={this.increase} className="plus"></button>
                         </div>
                       </div>
 
 
-                      {/* <div className='custom-control custom-switch'>
-
-                        <input
-                          type='checkbox'
-                          className='custom-control-input'
-                          id='customSwitches'
-                          checked={this.state.switch1}
-                          onChange={this.handleSwitchChange(1)}
-                          readOnly
-                        />
-                        <label className='custom-control-label' htmlFor='customSwitches'>
-                          Set as Active
-        </label>
-
-                      </div> */}
 
                 
                       <center> <Loader
@@ -557,21 +407,7 @@ this.setState({ dates_values: this.state.dates_values })
                 </MDBBtn>
                         </div>
                       </div>
-                      {/* <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2">
-
-{'&'}
-</p> */}
-
-{/* <div className="row my-3 d-flex justify-content-center">
-<MDBBtn
-  type="button"
-  color="white"
-  rounded
-  className="mr-md-3 z-depth-1a"
->
-  <MDBIcon fab className="blue-text text-center" onClick={this.list}><b>See Market place details</b></MDBIcon>
-</MDBBtn>
-</div> */}
+                   
                 
                     </MDBCardBody>
                     <div className="text-center mb-3">

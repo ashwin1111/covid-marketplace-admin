@@ -47,7 +47,10 @@ class home extends React.Component {
  
   }
   async login(){
-    
+    if(this.state.userName.length == 0 && this.state.password.length == 0){
+      alert("Please enter something to proceed")
+    }
+    else{
   
     let body =
     {
@@ -70,6 +73,9 @@ class home extends React.Component {
         if(apiResponse.data.msg == "Login success :)"){
           this.props.history.push("details");
         }
+        else{
+          alert("Incorrect Username and Password")
+        }
         })
         .catch((error) =>{
        
@@ -89,6 +95,7 @@ class home extends React.Component {
         })
      
     }
+  }
   
 
 
@@ -106,6 +113,7 @@ class home extends React.Component {
                   <strong>Log in</strong>
                 </h3>
               </div>
+                     <p style={{color:'red',float:'right',width:'170px'}}>All fields are mandatory</p>
               <MDBInput
                 label="Username"
                 group

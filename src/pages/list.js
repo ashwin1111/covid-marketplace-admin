@@ -229,6 +229,7 @@ render() {
           </center>
             <MDBRow >
             {this.state.list.map(
+              
                   ({ market_palce_name, market_place_address,customer_max_count,time_data }) => (
             <Col sm="4" style={{paddingTop:'4%'}}>
               
