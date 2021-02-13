@@ -1,6 +1,7 @@
 {
   "hosting": {
     "public": "build",
+    "site": "marketplace-administrator",
     "ignore": [
       "firebase.json",
       "**/.*",

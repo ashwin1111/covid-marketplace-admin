@@ -8,7 +8,7 @@ Alert,
  
 } from 'reactstrap';
 import Loader from 'react-loader-spinner'
-const URL="https://covid19-pollachi.herokuapp.com/admin/";
+const URL="https://covid19-marketplace.herokuapp.com/admin/";
 class home extends React.Component {
   constructor(props) {
     super(props);
